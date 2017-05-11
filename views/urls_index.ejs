@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+    <a href= "/urls/new">Make new shortURL</a>
+    <!-- Add your EJS code here -->
+    <% include ./partials/_header %>
+    <ul>
+       <% for (let keys in urls) { %>
+       <% let values = urls[keys]; %>
+       <li>
+
+         <%= keys %> : <%= values %>
+         <a href= "/urls/<%= keys %>">edit</a>
+         <form method="POST" action="/urls/<%= keys %>/delete"><button>delete</button></form>
+
+       </li>
+       <% } %>
+    </ul>
+</body>
+</html>

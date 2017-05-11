@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+  <% include ./partials/_header %>
+  <a href= "/urls/">Back to index</a>
+  <ul>
+    <li>
+      <%= urls[shortURL] %>
+    </li>
+
+  </ul>
+  <h3>update this short key</h3>
+    <!-- Add your EJS code here -->
+  <form action="/urls/<%= shortURL %>" method="POST" style="margin:150px;">
+  <label for="longURL">Enter a URL:</label>
+  <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+  <input type="submit" value="update">
+</body>
+</html>
