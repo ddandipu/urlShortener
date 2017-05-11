@@ -1,3 +1,14 @@
 <header>
    <h1> TinyApp</h1>
+   <% if (username === undefined) { %>
+   <form action="/login" method="POST" style="margin:150px;">
+     <label for="username">Enter your username:</label>
+     <input id="username" type="text" name="username" placeholder="insert username" style="width: 300px">
+     <input type="submit" value="Submit">
+   </form>
+   <% } else { %>
+   <p>
+     <%= username %>
+   </p>
+   <% } %>
 <header>
