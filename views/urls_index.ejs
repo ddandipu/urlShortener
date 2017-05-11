@@ -4,9 +4,9 @@
   <title>TinyApp</title>
 </head>
 <body>
-    <a href= "/urls/new">Make new shortURL</a>
     <!-- Add your EJS code here -->
     <% include ./partials/_header %>
+    <a href= "/urls/new">Make new shortURL</a>
     <ul>
        <% for (let keys in urls) { %>
        <% let values = urls[keys]; %>
