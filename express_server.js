@@ -8,10 +8,52 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set("view engine", "ejs");
 //set EJS
+//beg URL database and User database
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+// end URL and user database
+//reg page GET and POST
+app.get("/register", (req, res) => {
+  res.render("urls_register");
+  let templateVars =  {urls: urlDatabase,
+                       username: req.cookies["username"]
+  };
+  res.render("urls_register", templateVars);
+});
+
+app.post("/register", (req, res) => {
+  let randomID = generateRandomString();
+  if (req.body.email.length < 1 && req.body.password.length < 1) {
+    res.status(400).end("empty strings in email or password tab");
+  } else if (req.body.email.length < 1) {
+      res.status(400).send("empty strings in email or password tab");
+  } else if (req.body.password.length < 1) {
+      res.status(400).send("empty strings in email or password tab");
+  } else {
+      users[randomID] = {id : randomID,
+        email: req.body.email,
+        password: req.body.password
+    } //end of adding to user database
+  }
+  res.cookie("username", randomID);
+  console.log(users);
+  res.redirect("/urls");
+});
 
 app.get("/", (req, res) => {
   res.end("Hello!");
@@ -56,6 +98,8 @@ app.post("/logout", (req,res) => {
   res.redirect("/urls")
 });
 
+
+// beginning of /:id stuff
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id,
                        urls: urlDatabase,
