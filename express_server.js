@@ -12,18 +12,20 @@ app.set("view engine", "ejs");
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
-};
+  };
 
 const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: "purple-monkey-dinosaur",
+    urls: {}
   },
  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: "dishwasher-funk",
+    urls: {}
   }
 }
 // end URL and user database
@@ -120,6 +122,10 @@ app.post("/urls", (req, res) => {
   //console.log(req.body);
   let shortURL =generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
+  let id = req.cookies.user_id;
+  users[id].urls[shortURL] = req.body.longURL;
+  console.log(users);
+  console.log(urlDatabase);
   res.redirect("/urls/" + shortURL)
 });
 

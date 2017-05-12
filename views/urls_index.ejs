@@ -11,13 +11,11 @@
        <% for (let keys in urls) { %>
        <% let values = urls[keys]; %>
        <li>
-
-         <%= keys %> : <%= values %>
+         <%= keys %> : <%= values%>
          <a href= "/urls/<%= keys %>">edit</a>
          <form method="POST" action="/urls/<%= keys %>/delete"><button>delete</button></form>
-
        </li>
-       <% } %>
+      <% } %>
     </ul>
 </body>
 </html>
