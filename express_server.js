@@ -110,6 +110,8 @@ app.get("/urls/new", (req, res) => {
       templateVars.userpass = users[req.cookies["user_id"]].password;
       } else {
       templateVars.userid = undefined;
+      res.render("urls_login");
+      return;
     }
   res.render("urls_new", templateVars);
 });
