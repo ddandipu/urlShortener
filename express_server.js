@@ -10,9 +10,10 @@ app.set("view engine", "ejs");
 //set EJS
 //beg URL database and User database
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-  };
+   "b2xVn2": "http://www.lighthouselabs.ca",
+   "9sm5xK": "http://www.google.com"
+   };
+
 
 const users = {
   "userRandomID": {
@@ -138,6 +139,7 @@ app.post("/logout", (req,res) => {
 
 // beginning of /:id stuff
 app.get("/urls/:id", (req, res) => {
+
   let templateVars = { shortURL: req.params.id,
                        urls: urlDatabase,
                        };
@@ -154,9 +156,17 @@ app.get("/urls/:id", (req, res) => {
 
 app.post("/urls/:id", (req, res) => {
   //console.log(req.body);
+  let ident = req.cookies.user_id;
   let shortURL = req.params.id;
+  if((users[ident].urls[shortURL]) === (urlDatabase[shortURL])) {
   urlDatabase[shortURL] = req.body.longURL;
-  res.redirect("/urls/" + shortURL)
+  users[ident].urls[shortURL] = req.body.longURL;
+  console.log(users);
+  console.log(urlDatabase);
+  res.redirect("/urls/" + shortURL);
+  } else {
+    res.send("no access to this shortURL")
+  }
 });
 
 app.post("/urls/:id/delete", (req, res) => {
