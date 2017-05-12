@@ -2,7 +2,7 @@ var express = require("express");
 var cookieParser= require("cookie-parser");
 var app = express();
 var PORT = process.env.PORT || 8080; // default port 8080
-
+const bcrypt = require('bcrypt');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -46,7 +46,7 @@ app.post("/register", (req, res) => {
       let randomID = generateRandomString();
       users[randomID] = {id : randomID,
       email: req.body.email,
-      password: req.body.password,
+      password: bcrypt.hashSync(req.body.password, 10),
       urls : {}
       };
       res.cookie("user_id", randomID);
@@ -63,7 +63,7 @@ app.get("/login", (req, res) =>{
 app.post("/login", (req, res) => {
   for (var user in users) {
     if (users[user].email === req.body.email) {
-     if (users[user].password === req.body.password) {
+     if (bcrypt.compareSync(req.body.password, users[user].password)) {
       res.cookie("user_id", users[user].id);
       res.redirect("/urls");
       return;
@@ -99,6 +99,7 @@ app.get("/urls", (req, res) =>{
       } else {
       templateVars.userid = undefined;
       res.render("urls_login");
+      return;
     }
   res.render("urls_index", templateVars);
 });
@@ -148,6 +149,8 @@ app.get("/urls/:id", (req, res) => {
       templateVars.userpass = users[req.cookies["user_id"]].password;
       } else {
       templateVars.userid = undefined;
+      res.render("urls_login");
+      return;
     }
 
   res.render("urls_show", templateVars);
