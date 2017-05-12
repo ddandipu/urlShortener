@@ -9,10 +9,7 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 //set EJS
 //beg URL database and User database
-var urlDatabase = {
-   "b2xVn2": "http://www.lighthouselabs.ca",
-   "9sm5xK": "http://www.google.com"
-   };
+var urlDatabase = {};
 
 
 const users = {
@@ -49,7 +46,8 @@ app.post("/register", (req, res) => {
       let randomID = generateRandomString();
       users[randomID] = {id : randomID,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      urls : {}
       };
       res.cookie("user_id", randomID);
       console.log(users);
@@ -108,7 +106,7 @@ app.get("/urls/new", (req, res) => {
   let templateVars = {urls: urlDatabase,
                        };
   if (req.cookies["user_id"]) {
-      templateVars.userid = users[req.cookies["user_id"]].id;
+      templateVars.userid   = users[req.cookies["user_id"]].id;
       templateVars.usermail = users[req.cookies["user_id"]].email;
       templateVars.userpass = users[req.cookies["user_id"]].password;
       } else {
@@ -161,8 +159,6 @@ app.post("/urls/:id", (req, res) => {
   if((users[ident].urls[shortURL]) === (urlDatabase[shortURL])) {
   urlDatabase[shortURL] = req.body.longURL;
   users[ident].urls[shortURL] = req.body.longURL;
-  console.log(users);
-  console.log(urlDatabase);
   res.redirect("/urls/" + shortURL);
   } else {
     res.send("no access to this shortURL")
@@ -171,8 +167,15 @@ app.post("/urls/:id", (req, res) => {
 
 app.post("/urls/:id/delete", (req, res) => {
   //console.log(req.body);
+  let ident = req.cookies.user_id;
+  let shortURL = req.params.id;
+  if((users[ident].urls[shortURL]) === (urlDatabase[shortURL])) {
   delete urlDatabase[req.params.id]
+  delete users[ident].urls[shortURL]
   res.redirect("/urls")
+  } else {
+    res.send("no access to this shortURL");
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
