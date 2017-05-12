@@ -90,14 +90,15 @@ app.get("/hello", (req, res) =>{
 });
 
 app.get("/urls", (req, res) =>{
-  let templateVars = {urls: urlDatabase,
-                       };
+    let templateVars = {};
   if (req.cookies["user_id"]) {
       templateVars.userid = users[req.cookies["user_id"]].id;
       templateVars.usermail = users[req.cookies["user_id"]].email;
       templateVars.userpass = users[req.cookies["user_id"]].password;
+      templateVars.userurls = users[req.cookies["user_id"]].urls;
       } else {
       templateVars.userid = undefined;
+      res.render("urls_login");
     }
   res.render("urls_index", templateVars);
 });

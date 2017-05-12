@@ -8,8 +8,8 @@
     <% include ./partials/_header %>
     <a href= "/urls/new">Make new shortURL</a>
     <ul>
-       <% for (let keys in urls) { %>
-       <% let values = urls[keys]; %>
+       <% for (let keys in userurls) { %>
+       <% let values = userurls[keys]; %>
        <li>
          <%= keys %> : <%= values%>
          <a href= "/urls/<%= keys %>">edit</a>
