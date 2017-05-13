@@ -3,11 +3,11 @@
    <% if (userid === undefined) { %>
    <a href="/register">Please register</a>
    <a href="/login">Or Login</a>
+   <p/> Must login to see or make changes to your shortURL</p>
    <% } else { %>
    <p>
-     <%=  userid %><br>
+
      <%= usermail %><br>
-     <%= userpass %><br>
      <form action="/logout" method="POST">
      <input type="submit" value="Logout">
      </form>
