@@ -191,9 +191,12 @@ app.get("/urls/:id", (req, res) => {
     let ident = req.session.user_id;
     let shortURL = req.params.id;
     if((users[ident].urls[shortURL]) !== (urlDatabase[shortURL])) {
-    res.send("no access to this shortURL");
+    res.status(403).end("no access to this shortURL");
     return;
-    } else {
+    } else if (!(users[ident].urls[shortURL])) {
+      res.status(403).end("shortURL does not exist in database");
+    }
+    else {
       res.render("urls_show", templateVars);
     }
 });
@@ -207,7 +210,7 @@ app.post("/urls/:id", (req, res) => {
   users[ident].urls[shortURL] = req.body.longURL;
   res.redirect("/urls/" + shortURL);
   } else {
-    res.send("no access to this shortURL")
+    res.status(403).end("no access to this shortURL")
   }
 });
 // owners of the pairing may put in a new site and pair it with existing shortURL,
@@ -221,7 +224,7 @@ app.post("/urls/:id/delete", (req, res) => {
   delete users[ident].urls[shortURL]
   res.redirect("/urls")
   } else {
-    res.send("no access to this shortURL");
+    res.status(403).end("no access to this shortURL");
   }
 });
 // every shortURL can be deleted by their owners, the button appears in main index page
@@ -237,7 +240,7 @@ app.get("/u/:shortURL", (req, res) => {
   if (longURL !== undefined) {
     res.redirect(longURL);
   } else {
-      res.end ("<p> No shortURL found </p>");
+      res.status(403).end("<p> No shortURL found </p>");
   }
 });
 // this pulls the regular site address from shortURL and puts it into browser bar
