@@ -38,8 +38,15 @@ const users = {
 // end URL and user database
 //reg page GET and POST
 app.get("/register", (req, res) => {
-  let templateVars =  {urls: urlDatabase
-  };
+    let templateVars = {userurls : {}};
+  if (req.session.user_id) {
+      templateVars.userid = users[req.session["user_id"]].id;
+      templateVars.usermail = users[req.session["user_id"]].email;
+      templateVars.userpass = users[req.session["user_id"]].password;
+      templateVars.userurls = users[req.session["user_id"]].urls;
+    } else {
+      templateVars.userid = undefined;
+    }
   res.render("urls_register", templateVars);
 });
 //renders registration page
@@ -66,8 +73,15 @@ app.post("/register", (req, res) => {
 // takes in email and password for registration page, with checks for length and if
 // the inputted email is already in database. Also assigns random userID and session.
 app.get("/login", (req, res) =>{
-  let templateVars =  {urls: urlDatabase
-  };
+    let templateVars = {userurls : {}};
+  if (req.session.user_id) {
+      templateVars.userid = users[req.session["user_id"]].id;
+      templateVars.usermail = users[req.session["user_id"]].email;
+      templateVars.userpass = users[req.session["user_id"]].password;
+      templateVars.userurls = users[req.session["user_id"]].urls;
+    } else {
+      templateVars.userid = undefined;
+    }
   res.render("urls_login", templateVars);
 });
 // renders login page
@@ -160,11 +174,17 @@ app.get("/urls/:id", (req, res) => {
       templateVars.userpass = users[req.session["user_id"]].password;
       } else {
       templateVars.userid = undefined;
-      res.render("urls_login");
-      return;
+       res.render("urls_login", templateVars);
+       return;
     }
-
-  res.render("urls_show", templateVars);
+    let ident = req.session.user_id;
+    let shortURL = req.params.id;
+    if((users[ident].urls[shortURL]) !== (urlDatabase[shortURL])) {
+    res.send("no access to this shortURL");
+    return;
+    } else {
+      res.render("urls_show", templateVars);
+    }
 });
 // creates a page to see individual shortURL and regular website pairing
 app.post("/urls/:id", (req, res) => {

@@ -2,9 +2,8 @@
 <html lang="en">
   <head></head>
   <body style="font-size:20px; padding:50px;">
+        <% include partials/_header %>
   <h2>TinyApp LOGIN PAGE</h2>
-  <a href = "/register">No account? register here</a>
-  <p>Must login to view your shortUrl links</p>
       <form action="/login" method="POST" style="margin:150px;">
       <label for="email">Enter email:</label>
       <input id="email" type="email" name="email" placeholder="email" style="width: 300px"><br>
