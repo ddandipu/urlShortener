@@ -79,6 +79,8 @@ app.get("/login", (req, res) =>{
       templateVars.usermail = users[req.session["user_id"]].email;
       templateVars.userpass = users[req.session["user_id"]].password;
       templateVars.userurls = users[req.session["user_id"]].urls;
+      res.render("urls_index", templateVars)
+      return;
     } else {
       templateVars.userid = undefined;
     }
@@ -103,7 +105,16 @@ app.post("/login", (req, res) => {
 // checks inputted login credentials to our database, password is hashed, cookies are set to session.
 
 app.get("/", (req, res) => {
-  res.end("Hello!");
+  let templateVars = {userurls : {}};
+  if (req.session.user_id) {
+      templateVars.userid = users[req.session["user_id"]].id;
+      templateVars.usermail = users[req.session["user_id"]].email;
+      templateVars.userpass = users[req.session["user_id"]].password;
+      templateVars.userurls = users[req.session["user_id"]].urls;
+    } else {
+      templateVars.userid = undefined;
+    }
+  res.render("urls_login", templateVars);
 });
 // test page
 app.get("/urls.json", (req, res) => {
@@ -138,7 +149,7 @@ app.get("/urls/new", (req, res) => {
       templateVars.userpass = users[req.session["user_id"]].password;
       } else {
       templateVars.userid = undefined;
-      res.render("urls_index", templateVars);
+      res.render("urls_login", templateVars);
       return;
     }
   res.render("urls_new", templateVars);
